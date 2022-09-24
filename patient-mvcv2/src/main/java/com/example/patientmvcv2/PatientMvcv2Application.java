@@ -7,6 +7,8 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.util.Date;
 
@@ -15,6 +17,10 @@ public class PatientMvcv2Application {
 
     public static void main(String[] args) {
         SpringApplication.run(PatientMvcv2Application.class, args);
+    }
+    @Bean
+    PasswordEncoder passwordEncoder(){
+        return new BCryptPasswordEncoder();
     }
     //  @Bean
     CommandLineRunner commandLineRunner(PatientRepository patientRepository){
@@ -27,17 +33,17 @@ public class PatientMvcv2Application {
 
         };
     }
-    @Bean
+   @Bean
     CommandLineRunner saveUsers(SecurityService securityService
     ){return args -> {
-        securityService.saveNewUser("mohamed","1234","1234");
-        securityService.saveNewUser("yassine","1234","1234");
-        securityService.saveNewUser("hassan","1234","1234");
-        securityService.saveNewRole("USER","");
-        securityService.saveNewRole("ADMIN","");
-        securityService.addRoleToUser("mohamed","USER");
-        securityService.addRoleToUser("yasmine","USER");
-        securityService.addRoleToUser("mohamed","ADMIN");
+        securityService.saveNewUser("ahmed","1234","1234");
+       //  securityService.saveNewUser("yasmine","1234","1234");
+       //  securityService.saveNewUser("hassan","1234","1234");
+       // securityService.saveNewRole("USER","");
+       //  securityService.saveNewRole("ADMIN","");
+       // securityService.addRoleToUser("mohamed","USER");
+       //  securityService.addRoleToUser("yasmine","USER");
+        securityService.addRoleToUser("ahmed","ADMIN");
 
     };
     }

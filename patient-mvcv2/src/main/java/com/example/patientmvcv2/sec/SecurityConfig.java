@@ -21,9 +21,13 @@ import javax.sql.DataSource;
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Autowired
     private DataSource dataSource;
+    @Autowired
+    private UserDetailsService userDetailsService;
+    @Autowired
+    private PasswordEncoder passwordEncoder;
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception{
-      PasswordEncoder passwordEncoder=passwordEncoder();
+
    /*   String encodedPWD=passwordEncoder.encode("1234");
         System.out.println(encodedPWD);
         auth.inMemoryAuthentication().withUser("user1").password(encodedPWD).roles("USER");
@@ -37,20 +41,19 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .rolePrefix("ROLE_")
                 .passwordEncoder(passwordEncoder);
         */
+        auth.userDetailsService(userDetailsService);
+
 
     }
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.formLogin();
         http.authorizeRequests().antMatchers("/").permitAll();
-        http.authorizeRequests().antMatchers("/admin/**").hasRole("ADMIN");
-        http.authorizeRequests().antMatchers("/user /**").hasRole("USER");
+        http.authorizeRequests().antMatchers("/admin/**").hasAuthority("ADMIN");
+        http.authorizeRequests().antMatchers("/user /**").hasAuthority("USER");
         http.authorizeRequests().antMatchers("/webjars/**").permitAll();
         http.authorizeRequests().anyRequest().authenticated();
         http.exceptionHandling().accessDeniedPage("/403");
     }
-    @Bean
-    PasswordEncoder passwordEncoder(){
-        return new BCryptPasswordEncoder();
-    }
+
 }
